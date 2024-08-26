@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.awt.print.Book;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class BookingService {
@@ -83,7 +84,7 @@ public class BookingService {
         booking.setShowSeats(showSeats);
         booking.setBookingStatus(BookingStatus.PENDING);
         booking.setAmount(0);
-        booking.setBookingReference("ABC123");
+        booking.setBookingReference(RandomStringGenerationService.generateRandomAlphanumericString());
         return bookingRepository.save(booking);
     }
 }

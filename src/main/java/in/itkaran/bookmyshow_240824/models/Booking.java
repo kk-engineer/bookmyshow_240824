@@ -20,6 +20,16 @@ public class Booking extends BaseModel{
     private List<Payment> payments;
     @Enumerated(EnumType.ORDINAL)
     private BookingStatus bookingStatus;
+
+    @Override
+    public String toString() {
+        return "Booking Reference: " + bookingReference + "\n" +
+                "Show Seats: " + showSeats + "\n" +
+                "User Name: " + user.getName() + "\n" +
+                "User Email: " + user.getEmail() + "\n" +
+                "Amount: " + amount + "\n" +
+                "Booking Status: " + bookingStatus;
+    }
 }
 
 /*
