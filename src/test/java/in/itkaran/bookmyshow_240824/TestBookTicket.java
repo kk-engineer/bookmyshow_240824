@@ -17,12 +17,12 @@ public class TestBookTicket {
     @Test
     void testBooking() {
         BookTicketRequestDto bookTicketRequestDto = new BookTicketRequestDto();
-        bookTicketRequestDto.setUserId(1L);
+        bookTicketRequestDto.setUserId(2L);
         bookTicketRequestDto.setShowId(1L);
-        bookTicketRequestDto.setShowSeatIds(List.of(9L, 10L));
+        bookTicketRequestDto.setShowSeatIds(List.of(16L, 17L));
 
         BookTicketResponseDto bookTicketResponseDto = bookingController.bookTicket(bookTicketRequestDto);
-        System.out.println(bookTicketResponseDto.getBooking());
-        System.out.println(bookTicketResponseDto.getStatus());
+        System.out.println("Booking Reference: "+ bookTicketResponseDto.getBooking());
+        System.out.println("Seats Blocked status: "+ bookTicketResponseDto.getStatus());
     }
 }

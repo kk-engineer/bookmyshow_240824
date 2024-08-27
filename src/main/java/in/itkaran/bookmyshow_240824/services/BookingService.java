@@ -9,6 +9,8 @@ import in.itkaran.bookmyshow_240824.repositories.ShowSeatRepository;
 import in.itkaran.bookmyshow_240824.repositories.UserRepository;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.print.Book;
 import java.util.List;
@@ -21,17 +23,22 @@ public class BookingService {
     private ShowRepository showRepository;
     private ShowSeatRepository showSeatRepository;
     private BookingRepository bookingRepository;
+    private PriceCalculatorService priceCalculatorService;
 
     public BookingService(UserRepository userRepository,
                           ShowRepository showRepository,
                           ShowSeatRepository showSeatRepository,
-                          BookingRepository bookingRepository) {
+                          BookingRepository bookingRepository,
+                          PriceCalculatorService priceCalculatorService) {
         this.userRepository = userRepository;
         this.showRepository = showRepository;
         this.showSeatRepository = showSeatRepository;
         this.bookingRepository = bookingRepository;
+        this.priceCalculatorService = priceCalculatorService;
     }
 
+
+    //@Transactional(isolation = Isolation.SERIALIZABLE)
     public Booking bookTicket(Long userId,
                               Long showId,
                               List<Long> showSeatIds)
@@ -63,7 +70,7 @@ public class BookingService {
         Show show = optionalShow.get();
 
         // 3. Get the showSeats by showSeatIds
-        List<ShowSeat>  showSeats = showSeatRepository.findAllById(showSeatIds);
+        List<ShowSeat> showSeats = showSeatRepository.findAllById(showSeatIds);
 
         // 4. Check if all the showSeats are available
         for (ShowSeat showSeat : showSeats) {
@@ -72,19 +79,22 @@ public class BookingService {
             }
         }
 
+        // Lock
         // 5. Change the status of the showSeats to BLOCKED
         for (ShowSeat showSeat : showSeats) {
             showSeat.setStatus(ShowSeatStatus.BLOCKED);
             showSeatRepository.save(showSeat);
         }
+        // Unlock
 
         // 6. Create the booking and move to payment page
         Booking booking = new Booking();
         booking.setUser(user);;
         booking.setShowSeats(showSeats);
         booking.setBookingStatus(BookingStatus.PENDING);
-        booking.setAmount(0);
+        booking.setAmount(priceCalculatorService.calculatePrice(showSeats, show));
         booking.setBookingReference(RandomStringGenerationService.generateRandomAlphanumericString());
         return bookingRepository.save(booking);
+        // proceed to Payment page
     }
 }
