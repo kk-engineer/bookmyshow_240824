@@ -32,8 +32,8 @@ public class TestConcurrentBooking {
     @Test
     void testConcurrentBooking() {
         // Write your test case here
-        Long userId = 2L, showId = 1L;
-        List<Long> bookingSeats = List.of(13L, 14L);
+        Long userId = 2L, showId = 2L;
+        List<Long> bookingSeats = List.of(26L, 27L);
 
         int numberOfThreads = 5;
 

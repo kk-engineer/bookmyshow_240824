@@ -184,7 +184,7 @@ public class CreateTestData {
         int row = 2;
         int col = 10;
         for (int i = 0; i < row; i++) {
-            for (int j = 1; j <= col; j++) {
+            for (int j = 0; j < col; j++) {
                 Seat seat = new Seat();
                 char rowChar = (char) (i + 'A');
                 seat.setSeatNumber("" + rowChar + j);

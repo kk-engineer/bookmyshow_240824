@@ -38,7 +38,7 @@ public class BookingService {
     }
 
 
-    //@Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public Booking bookTicket(Long userId,
                               Long showId,
                               List<Long> showSeatIds)
